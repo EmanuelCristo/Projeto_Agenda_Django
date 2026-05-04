@@ -1,0 +1,70 @@
+{% extends 'principal.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <form action="" method="GET">
+            <div class="form-group row p-3">
+                <label class="col-sm-3 col-form-label">Nome ou descrição do serviço:</label>
+                <div class="col-sm-7">
+                    <input class="form-control" type="text" name="buscar" value="{{ request.GET.buscar }}" placeholder="Digite o nome ou a descrição do serviço">
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </form>
+
+        {% if object_list %}
+        <div class="card-body">
+            <h3 class="text-center">Serviços Cadastrados</h3>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Preço</th>
+                            <th>Produtos</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for servico in object_list %}
+                        <tr>
+                            <td>{{ servico.nome }}</td>
+                            <td>{{ servico.descricao }}</td>
+                            <td>{{ servico.preco }}</td>
+                            <td>
+                                {% for produto in servico.produtos.all %}
+                                    {% if forloop.last %}
+                                        {{ produto.nome }}
+                                    {% else %}
+                                        {{ produto.nome }},
+                                    {% endif %}
+                                {% empty %}
+                                    <span class="text-muted">Nenhum produto registrado</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <a href="{% url 'servico_editar' servico.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="{% url 'servico_apagar' servico.pk %}" class="btn btn-sm btn-outline-danger" title="Apagar">
+                                    <i class="far fa-trash-alt"></i> Apagar
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-center">
+                {% bootstrap_pagination object_list url="/servicos?page=1" size="sm" %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
