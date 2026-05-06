@@ -1,8 +1,10 @@
+from django.http import Http404
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.db.models import Q
+from django.db.models import Q, ProtectedError
 from django.db import transaction
 from django.core.paginator import Paginator
 from .models import Servico
@@ -94,3 +96,13 @@ class ServicoDeleteView(SuccessMessageMixin, DeleteView):
     template_name = 'servico_apagar.html'
     success_url = reverse_lazy('servicos')
     success_message = 'Serviço apagado com sucesso!'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        try:
+            return super().post(request, *args, **kwargs)
+        except ProtectedError:
+            messages.error(request, f'O serviço {self.object} não pode ser excluido. Esse serviço está registrado em ordens de serviço')
+
+        return redirect(success_url)

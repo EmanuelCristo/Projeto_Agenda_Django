@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Upper
 
 
 class Servico(models.Model):
@@ -7,12 +8,13 @@ class Servico(models.Model):
     descricao = models.TextField(verbose_name='Descrição', max_length=300,
                                  help_text='Descrição e observações do serviço')
 
-    produtos = models.ManyToManyField(to='produtos.Produto', through='servicos.ProdutosServico',
+    produtos = models.ManyToManyField(to='produtos.Produto', null=True, through='servicos.ProdutosServico',
                                       related_name='servico_produtos')
 
     class Meta:
         verbose_name = 'Serviço'
         verbose_name_plural = 'Serviços'
+        ordering = [Upper('nome')]
 
     def __str__(self):
         return self.nome
@@ -28,6 +30,8 @@ class ProdutosServico(models.Model):
     class Meta:
         verbose_name = 'Produto utilizado'
         verbose_name_plural = 'Produtos utilizados'
+
+        constraints = [models.UniqueConstraint(fields=['servico', 'produto'], name='constraint_produto_servico')]
 
     def __str__(self):
         return f'{self.produto}'
