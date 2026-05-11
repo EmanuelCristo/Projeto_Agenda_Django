@@ -15,7 +15,7 @@ class IndexView(TemplateView):
         context = super(IndexView, self).get_context_data()
         context['qtd_clientes'] = Cliente.objects.count()
         context['qtd_funcionarios'] = Funcionario.objects.count()
-        context['qtd_fornecedor'] = Fornecedor.objects.count()
+        context['qtd_fornecedores'] = Fornecedor.objects.count()
         context['qtd_servicos'] = Servico.objects.count()
         context['qtd_produtos'] = Produto.objects.count()
         context['qtd_agendamentos'] = Agendamento.objects.count()
