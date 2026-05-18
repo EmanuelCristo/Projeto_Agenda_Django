@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404
 from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -11,7 +12,9 @@ from .models import Servico
 from .forms import ServicoModelForm, ProdutosServicoInLine
 
 
-class ServicosView(ListView):
+class ServicosView(PermissionRequiredMixin, ListView):
+    permission_required = 'servicos.view_servico'
+    permission_denied_message = 'Visualizar servico'
     model = Servico
     template_name = 'servicos.html'
 
@@ -30,7 +33,9 @@ class ServicosView(ListView):
             return messages.info(self.request, 'Não existem serviços cadastrados!')
 
 
-class ServicoAddView(SuccessMessageMixin, CreateView):
+class ServicoAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'servicos.add_servico'
+    permission_denied_message = 'cadastrar servico'
     model = Servico
     form_class = ServicoModelForm
     template_name = 'servico_form.html'
@@ -59,7 +64,9 @@ class ServicoAddView(SuccessMessageMixin, CreateView):
                 return self.render_to_response(self.get_context_data(form=form))
 
 
-class ServicoUpdateView(SuccessMessageMixin, UpdateView):
+class ServicoUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'servicos.update_servico'
+    permission_denied_message = 'Atualizar servico'
     model = Servico
     form_class = ServicoModelForm
     template_name = 'servico_form.html'
@@ -91,7 +98,9 @@ class ServicoUpdateView(SuccessMessageMixin, UpdateView):
                 return self.render_to_response(self.get_context_data(form=form))
 
 
-class ServicoDeleteView(SuccessMessageMixin, DeleteView):
+class ServicoDeleteView(PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'servicos.delete_servico'
+    permission_denied_message = 'Apagar servico'
     model = Servico
     template_name = 'servico_apagar.html'
     success_url = reverse_lazy('servicos')
