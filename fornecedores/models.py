@@ -4,7 +4,7 @@ from django.db.models.functions import Upper
 
 class Fornecedor(models.Model):
     nome = models.CharField('Nome', max_length=70, help_text='Nome do Fornecedor')
-    cpnj = models.CharField('Cnpj', max_length=18, help_text='Cnpj do Fornecedor', unique=True)
+    cnpj = models.CharField('Cnpj', max_length=18, help_text='Cnpj do Fornecedor', unique=True)
     fone = models.CharField('Fone', max_length=15, help_text='Fone do fornecedor')
 
     class Meta:

@@ -131,7 +131,7 @@ class AgendamentoDeleteView(PermissionRequiredMixin, LoginRequiredMixin, Success
     success_url = reverse_lazy('agendamentos')
     success_message = 'Agendamento apagado com sucesso!'
 
-class AgendamentoExibir(LoginRequiredMixin, DetailView):
+class AgendamentoExibir(DetailView):
     model = Agendamento
     template_name = 'agendamento_exibir.html'
 
@@ -180,3 +180,7 @@ class AgendamentoExibir(LoginRequiredMixin, DetailView):
                   fail_silently=False,
                   )
         return redirect('agendamentos')
+
+class AgendamentosGraficoView(ListView):
+    model = Agendamento
+    template_name = 'grafico.html'
