@@ -8,7 +8,7 @@ class Servico(models.Model):
     descricao = models.TextField(verbose_name='Descrição', max_length=300,
                                  help_text='Descrição e observações do serviço')
 
-    produtos = models.ManyToManyField(to='produtos.Produto', null=True, through='servicos.ProdutosServico',
+    produtos = models.ManyToManyField(to='produtos.Produto', through='servicos.ProdutosServico',
                                       related_name='servico_produtos')
 
     class Meta:
