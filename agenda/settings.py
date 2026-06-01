@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import decouple
+import cloudinary
+import dj_database_url
 
 from django.conf.global_settings import LOGIN_REDIRECT_URL
 
@@ -27,7 +29,6 @@ SECRET_KEY = decouple.config("SECRET_KEY")
 DEBUG = decouple.config("DEBUG", cast=bool)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = decouple.config("ALLOWED_HOSTS").split(",")
 
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-INSTALLED_APPS += ['django_bootstrap5',]
+INSTALLED_APPS += ['django_bootstrap5', 'cloudinary']
 
 INSTALLED_APPS += ['home', 'fornecedores', 'clientes', 'funcionarios', 'produtos', 'servicos', 'agendamentos']
 
@@ -81,14 +82,7 @@ WSGI_APPLICATION = 'agenda.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'agenda',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.parse("postgresql://agenda_ogdr_user:j84L2fCC7qkaZ1R9sH7Jnj33Ei1lj2xY@dpg-d8f1df4m0tmc73ef9os0-a.oregon-postgres.render.com/agenda_ogdr"),
 }
 
 
@@ -128,6 +122,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+cloudinary.config(
+    cloud_name = 'dptskjaar',
+    api_key = '417414767992793',
+    api_secret = 'NKqrd2DezK5zRvOPhp6mqDfUinE',
+    secure =True,
+)
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'

@@ -1,13 +1,12 @@
+from cloudinary.models import CloudinaryField
 from django.db import models
 from django.db.models.functions import Upper
-from stdimage import StdImageField
-
 
 class Pessoa(models.Model):
     nome = models.CharField('Nome', max_length=50, help_text='Nome completo')
     fone = models.CharField('Telefone', max_length=15, help_text='Número do telefone')
     email = models.EmailField('E-mail', max_length=100, help_text='Endereço de e-mail', unique=True)
-    foto = StdImageField('Foto', upload_to='pessoas', delete_orphans=True, null=True, blank=True)
+    foto = CloudinaryField('Foto', null=True, blank=True)
 
     class Meta:
         abstract = True
