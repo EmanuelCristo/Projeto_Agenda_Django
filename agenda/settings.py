@@ -50,6 +50,7 @@ INSTALLED_APPS += ['home', 'fornecedores', 'clientes', 'funcionarios', 'produtos
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,7 +83,7 @@ WSGI_APPLICATION = 'agenda.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse("postgresql://agenda_ogdr_user:j84L2fCC7qkaZ1R9sH7Jnj33Ei1lj2xY@dpg-d8f1df4m0tmc73ef9os0-a.oregon-postgres.render.com/agenda_ogdr"),
+    'default': dj_database_url.parse(decouple.config("DATABASE_URL")),
 }
 
 
@@ -123,16 +124,22 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 cloudinary.config(
-    cloud_name = 'dptskjaar',
-    api_key = '417414767992793',
-    api_secret = 'NKqrd2DezK5zRvOPhp6mqDfUinE',
-    secure =True,
+    cloud_name = decouple.config("CLOUD_NAME"),
+    api_key = decouple.config("API_KEY"),
+    api_secret = decouple.config("API_SECRET"),
+    secure =decouple.config("SECURE"),
 )
 MEDIA_URL = '/media/'
+
+if not DEBUG:
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
 STATICFILES_DIRS = [BASE_DIR / 'static',]
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
